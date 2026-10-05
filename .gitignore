@@ -1,0 +1,10 @@
+# binarios gerados pelo make
+c/base/filosofos_garfos
+c/base/filosofos_estados
+c/base/barbeiro
+c/solucao/filosofos_garfos
+c/solucao/filosofos_estados
+c/solucao/barbeiro
+
+# classes Java compiladas
+*.class
