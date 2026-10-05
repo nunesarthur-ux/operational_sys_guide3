@@ -40,6 +40,7 @@
 /* TODO 0: declare aqui um semaforo para cada garfo.
  *   sem_t garfo[N_FILOSOFOS];
  */
+ sem_t garfo[N_FILOSOFOS];
 
 
 /* ---- Infraestrutura auxiliar de log/verificacao. NAO faz parte do
@@ -141,6 +142,7 @@ void *filosofo(void *arg) {
          *         da esquerda estiver com ele)
          *   sem_wait(&garfo[GARFO_ESQ(i)]);
          */
+         sem_wait(&garfo[GARFO_ESQ(i)]);
 
         situacao[i] = COM_GARFO_ESQ;
         if (ATRASO_ENTRE_GARFOS_US > 0) usleep(ATRASO_ENTRE_GARFOS_US);
@@ -148,16 +150,18 @@ void *filosofo(void *arg) {
         /* TODO 2: pegar o garfo da direita
          *   sem_wait(&garfo[GARFO_DIR(i)]);
          */
+         sem_wait(&garfo[GARFO_DIR(i)]);
 
         comer(i, inicio_fome);
 
         /* TODO 3: devolver o garfo da esquerda
          *   sem_post(&garfo[GARFO_ESQ(i)]);
          */
-
+         sem_post(&garfo[GARFO_ESQ(i)]);
         /* TODO 4: devolver o garfo da direita
          *   sem_post(&garfo[GARFO_DIR(i)]);
          */
+         sem_post(&garfo[GARFO_DIR(i)]);
     }
     situacao[i] = SATISFEITO;
     return NULL;
@@ -171,7 +175,9 @@ int main(void) {
      *   for (int i = 0; i < N_FILOSOFOS; i++)
      *       sem_init(&garfo[i], 0, 1);
      */
-
+    for (int i = 0; i < N_FILOSOFOS; i++) {
+        sem_init(&garfo[i], 0, 1);
+    }
     long inicio = agora_us();
     pthread_create(&wd, NULL, watchdog, NULL);
     pthread_detach(wd);
@@ -198,6 +204,9 @@ int main(void) {
      *   for (int i = 0; i < N_FILOSOFOS; i++)
      *       sem_destroy(&garfo[i]);
      */
+    for (int i = 0; i < N_FILOSOFOS; i++) {
+        sem_destroy(&garfo[i]);
+    }
 
     return 0;
 }
