@@ -35,7 +35,7 @@
  * Ponto de injecao de atraso, usado nos experimentos da Parte 2.3
  * do roteiro. Deixe em 0 ate que o roteiro peca para alterar.
  * ------------------------------------------------------------- */
-#define ATRASO_ENTRE_GARFOS_US  100000
+#define ATRASO_ENTRE_GARFOS_US  0
 
 /* TODO 0: declare aqui um semaforo para cada garfo.
  *   sem_t garfo[N_FILOSOFOS];
@@ -142,12 +142,7 @@ void *filosofo(void *arg) {
          *         da esquerda estiver com ele)
          *   sem_wait(&garfo[GARFO_ESQ(i)]);
          */
-         int primeiro = GARFO_ESQ(i), segundo = GARFO_DIR(i);
-        if (i == N_FILOSOFOS - 1) {        /* o ultimo filosofo e "canhoto" */
-        primeiro = GARFO_DIR(i);
-        segundo  = GARFO_ESQ(i);
-        }
-        sem_wait(&garfo[primeiro]);
+         sem_wait(&garfo[GARFO_ESQ(i)]);
 
         situacao[i] = COM_GARFO_ESQ;
         if (ATRASO_ENTRE_GARFOS_US > 0) usleep(ATRASO_ENTRE_GARFOS_US);
@@ -155,7 +150,7 @@ void *filosofo(void *arg) {
         /* TODO 2: pegar o garfo da direita
          *   sem_wait(&garfo[GARFO_DIR(i)]);
          */
-        sem_wait(&garfo[segundo]);
+         sem_wait(&garfo[GARFO_DIR(i)]);
 
         comer(i, inicio_fome);
 
