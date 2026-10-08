@@ -148,7 +148,7 @@ void *filosofo(void *arg) {
                 break;
             sem_post(&garfo[GARFO_ESQ(i)]);
             situacao[i] = COM_FOME;
-            if (ATRASO_ENTRE_GARFOS_US > 0) usleep(ATRASO_ENTRE_GARFOS_US);
+            if (ATRASO_ENTRE_GARFOS_US > 0) usleep(rand_r(&semente) % (ATRASO_ENTRE_GARFOS_US + 1));
         }
         if (tentativas > 1)
             printf("[Filosofo %d] precisou de %d tentativas\n", i, tentativas);
