@@ -168,12 +168,12 @@ void pegar_garfos(int i) {
     /* TODO 3: sair da regiao critica
      *   sem_post(&mutex);
      */
+     sem_wait(&s[i]);
     sem_post(&mutex);
     /* TODO 4: bloquear se nao conseguiu os garfos (se conseguiu, o
      *         sem_post do TODO 1 ja deixou s[i] = 1 e ele passa direto)
      *   sem_wait(&s[i]);
      */
-    sem_wait(&s[i]);
 }
 
 void devolver_garfos(int i) {
@@ -182,7 +182,7 @@ void devolver_garfos(int i) {
      */
     sem_wait(&mutex);
     estado[i] = PENSANDO;
-    //testar(ESQUERDO(i));       /* o vizinho da esquerda pode comer agora? */
+    testar(ESQUERDO(i));       /* o vizinho da esquerda pode comer agora? */
     testar(DIREITO(i));        /* e o vizinho da direita?                 */
 
     /* TODO 6: sair da regiao critica
