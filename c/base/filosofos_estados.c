@@ -182,7 +182,7 @@ void devolver_garfos(int i) {
      */
     sem_wait(&mutex);
     estado[i] = PENSANDO;
-    testar(ESQUERDO(i));       /* o vizinho da esquerda pode comer agora? */
+    //testar(ESQUERDO(i));       /* o vizinho da esquerda pode comer agora? */
     testar(DIREITO(i));        /* e o vizinho da direita?                 */
 
     /* TODO 6: sair da regiao critica
@@ -220,7 +220,7 @@ int main(void) {
      */
     sem_init(&mutex, 0, 1);
     for (int i = 0; i < N_FILOSOFOS; i++)
-        sem_init(&s[i], 0, 1);
+        sem_init(&s[i], 0, 0);
     long inicio = agora_us();
     pthread_create(&wd, NULL, watchdog, NULL);
     pthread_detach(wd);
