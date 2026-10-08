@@ -160,7 +160,7 @@ void pegar_garfos(int i) {
     /* TODO 2: entrar na regiao critica
      *   sem_wait(&mutex);
      */
-     //sem_wait(&mutex);
+     sem_wait(&mutex);
 
     estado[i] = COM_FOME;
     testar(i);                 /* tenta pegar os dois garfos de uma vez */
@@ -168,7 +168,7 @@ void pegar_garfos(int i) {
     /* TODO 3: sair da regiao critica
      *   sem_post(&mutex);
      */
-    //sem_post(&mutex);
+    sem_post(&mutex);
     /* TODO 4: bloquear se nao conseguiu os garfos (se conseguiu, o
      *         sem_post do TODO 1 ja deixou s[i] = 1 e ele passa direto)
      *   sem_wait(&s[i]);
@@ -180,7 +180,7 @@ void devolver_garfos(int i) {
     /* TODO 5: entrar na regiao critica
      *   sem_wait(&mutex);
      */
-    //sem_wait(&mutex);
+    sem_wait(&mutex);
     estado[i] = PENSANDO;
     testar(ESQUERDO(i));       /* o vizinho da esquerda pode comer agora? */
     testar(DIREITO(i));        /* e o vizinho da direita?                 */
@@ -188,7 +188,7 @@ void devolver_garfos(int i) {
     /* TODO 6: sair da regiao critica
      *   sem_post(&mutex);
      */
-    //sem_post(&mutex);
+    sem_post(&mutex);
 }
 
 void *filosofo(void *arg) {
@@ -220,7 +220,7 @@ int main(void) {
      */
     sem_init(&mutex, 0, 1);
     for (int i = 0; i < N_FILOSOFOS; i++)
-        sem_init(&s[i], 0, 0);
+        sem_init(&s[i], 0, 1);
     long inicio = agora_us();
     pthread_create(&wd, NULL, watchdog, NULL);
     pthread_detach(wd);
