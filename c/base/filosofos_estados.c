@@ -51,6 +51,8 @@ int estado[N_FILOSOFOS];   /* estado de cada filosofo (comeca PENSANDO) */
  *   sem_t s[N_FILOSOFOS];   -> um semaforo por filosofo; o filosofo i
  *                              bloqueia em s[i] quando nao consegue comer
  */
+ sem_t mutex;
+ sem_t s[N_FILOSOFOS];
 
 
 /* ---- Infraestrutura auxiliar de log/verificacao. NAO faz parte do
@@ -150,6 +152,7 @@ void testar(int i) {
          *         bloquear) em s[i] dentro de pegar_garfos()
          *   sem_post(&s[i]);
          */
+         sem_post(&s[i]);
     }
 }
 
@@ -157,6 +160,7 @@ void pegar_garfos(int i) {
     /* TODO 2: entrar na regiao critica
      *   sem_wait(&mutex);
      */
+     sem_wait(&mutex);
 
     estado[i] = COM_FOME;
     testar(i);                 /* tenta pegar os dois garfos de uma vez */
@@ -164,18 +168,19 @@ void pegar_garfos(int i) {
     /* TODO 3: sair da regiao critica
      *   sem_post(&mutex);
      */
-
+    sem_post(&mutex);
     /* TODO 4: bloquear se nao conseguiu os garfos (se conseguiu, o
      *         sem_post do TODO 1 ja deixou s[i] = 1 e ele passa direto)
      *   sem_wait(&s[i]);
      */
+    sem_wait(&s[i]);
 }
 
 void devolver_garfos(int i) {
     /* TODO 5: entrar na regiao critica
      *   sem_wait(&mutex);
      */
-
+    sem_wait(&mutex);
     estado[i] = PENSANDO;
     testar(ESQUERDO(i));       /* o vizinho da esquerda pode comer agora? */
     testar(DIREITO(i));        /* e o vizinho da direita?                 */
@@ -183,6 +188,7 @@ void devolver_garfos(int i) {
     /* TODO 6: sair da regiao critica
      *   sem_post(&mutex);
      */
+    sem_post(&mutex);
 }
 
 void *filosofo(void *arg) {
@@ -212,7 +218,9 @@ int main(void) {
      *   for (int i = 0; i < N_FILOSOFOS; i++)
      *       sem_init(&s[i], 0, 0);           // ninguem comeca autorizado a comer
      */
-
+    sem_init(&mutex, 0, 1);
+    for (int i = 0; i < N_FILOSOFOS; i++)
+        sem_init(&s[i], 0, 0);
     long inicio = agora_us();
     pthread_create(&wd, NULL, watchdog, NULL);
     pthread_detach(wd);
@@ -240,6 +248,8 @@ int main(void) {
      *   for (int i = 0; i < N_FILOSOFOS; i++)
      *       sem_destroy(&s[i]);
      */
-
+    sem_destroy(&mutex);
+    for (int i = 0; i < N_FILOSOFOS; i++)
+        sem_destroy(&s[i]);
     return 0;
 }
