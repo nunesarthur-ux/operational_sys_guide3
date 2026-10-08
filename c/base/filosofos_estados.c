@@ -42,7 +42,7 @@
  * Ponto de injecao de atraso, usado nos experimentos da Parte 3.3
  * do roteiro. Deixe em 0 ate que o roteiro peca para alterar.
  * ------------------------------------------------------------- */
-#define ATRASO_TESTAR_US  0
+#define ATRASO_TESTAR_US  1000
 
 int estado[N_FILOSOFOS];   /* estado de cada filosofo (comeca PENSANDO) */
 
