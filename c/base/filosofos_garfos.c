@@ -138,26 +138,13 @@ void *filosofo(void *arg) {
 
         situacao[i] = COM_FOME;
         long inicio_fome = agora_us();
-        int tentativas = 0;
-        for (;;) {
-            tentativas++;
-            sem_wait(&garfo[GARFO_ESQ(i)]);
-            situacao[i] = COM_GARFO_ESQ;
-            if (ATRASO_ENTRE_GARFOS_US > 0) usleep(ATRASO_ENTRE_GARFOS_US);
-            if (sem_trywait(&garfo[GARFO_DIR(i)]) == 0)
-                break;
-            sem_post(&garfo[GARFO_ESQ(i)]);
-            situacao[i] = COM_FOME;
-            if (ATRASO_ENTRE_GARFOS_US > 0) usleep(rand_r(&semente) % (ATRASO_ENTRE_GARFOS_US + 1));
-        }
-        if (tentativas > 1)
-            printf("[Filosofo %d] precisou de %d tentativas\n", i, tentativas);
+        
 
         /* TODO 1: pegar o garfo da esquerda (bloqueia se o vizinho
          *         da esquerda estiver com ele)
          *   sem_wait(&garfo[GARFO_ESQ(i)]);
          */
-         
+        sem_wait(&garfo[GARFO_ESQ(i)]);
 
         //situacao[i] = COM_GARFO_ESQ;
         //if (ATRASO_ENTRE_GARFOS_US > 0) usleep(ATRASO_ENTRE_GARFOS_US);
@@ -165,7 +152,7 @@ void *filosofo(void *arg) {
         /* TODO 2: pegar o garfo da direita
          *   sem_wait(&garfo[GARFO_DIR(i)]);
          */
-        
+        sem_wait(&garfo[GARFO_DIR(i)]);
 
         comer(i, inicio_fome);
 
