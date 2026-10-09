@@ -39,7 +39,7 @@ public class Mesa {
          *       wait();
          *   }
          */
-        while (estado[esquerdo(i)] == COMENDO || estado[direito(i)] == COMENDO) {
+        if (estado[esquerdo(i)] == COMENDO || estado[direito(i)] == COMENDO) {
             wait();
         }
         estado[i] = COMENDO;
