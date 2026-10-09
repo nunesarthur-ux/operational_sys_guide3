@@ -250,7 +250,7 @@ int main(void) {
      *          Acorde-o para que ele perceba que o expediente acabou.
      *   sem_post(&clientes);
      */
-    sem_post(&clientes);
+    //sem_post(&clientes);
     pthread_join(barb, NULL);
 
     pthread_mutex_lock(&aux_mutex);
