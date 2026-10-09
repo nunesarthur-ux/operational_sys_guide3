@@ -46,7 +46,7 @@ public class Mesa {
     }
 
     /* TODO 3: adicione o modificador 'synchronized' a este metodo. */
-    public synchronized void devolverGarfos(int i) {
+    public void devolverGarfos(int i) {
         estado[i] = PENSANDO;
 
         /* TODO 4: avise os filosofos que estao esperando que os garfos
@@ -54,7 +54,7 @@ public class Mesa {
          *
          *   notifyAll();
          */
-        notify();
+        notifyAll();
     }
 
     /* Infraestrutura auxiliar (usada pelo watchdog), NAO faz parte do exercicio. */
