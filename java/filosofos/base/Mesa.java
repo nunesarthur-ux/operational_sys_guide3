@@ -39,7 +39,7 @@ public class Mesa {
          *       wait();
          *   }
          */
-        if (estado[esquerdo(i)] == COMENDO || estado[direito(i)] == COMENDO) {
+        while (estado[esquerdo(i)] == COMENDO || estado[direito(i)] == COMENDO) {
             wait();
         }
         estado[i] = COMENDO;
@@ -54,7 +54,7 @@ public class Mesa {
          *
          *   notifyAll();
          */
-        notifyAll();
+        notify();
     }
 
     /* Infraestrutura auxiliar (usada pelo watchdog), NAO faz parte do exercicio. */
