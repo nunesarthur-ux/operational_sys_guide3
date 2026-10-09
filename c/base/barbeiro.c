@@ -28,7 +28,7 @@
 #include <pthread.h>
 #include <semaphore.h>
 
-#define CADEIRAS              3       /* cadeiras na sala de espera */
+#define CADEIRAS              10       /* cadeiras na sala de espera */
 #define N_CLIENTES            20
 #define TEMPO_CORTE_US        20000
 #define INTERVALO_CHEGADA_US  15000   /* intervalo maximo (aleatorio) entre chegadas */
@@ -250,7 +250,7 @@ int main(void) {
      *          Acorde-o para que ele perceba que o expediente acabou.
      *   sem_post(&clientes);
      */
-    //sem_post(&clientes);
+    sem_post(&clientes);
     pthread_join(barb, NULL);
 
     pthread_mutex_lock(&aux_mutex);
