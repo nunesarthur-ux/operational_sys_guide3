@@ -29,7 +29,7 @@ public class Mesa {
     private int direito(int i)  { return (i + 1) % n; }      // vizinho da direita
 
     /* TODO 1: adicione o modificador 'synchronized' a este metodo. */
-    public void pegarGarfos(int i) throws InterruptedException {
+    public synchronized void pegarGarfos(int i) throws InterruptedException {
         estado[i] = COM_FOME;
 
         /* TODO 2: enquanto algum vizinho estiver comendo, o filosofo
@@ -39,12 +39,14 @@ public class Mesa {
          *       wait();
          *   }
          */
-
+        while (estado[esquerdo(i)] == COMENDO || estado[direito(i)] == COMENDO) {
+            wait();
+        }
         estado[i] = COMENDO;
     }
 
     /* TODO 3: adicione o modificador 'synchronized' a este metodo. */
-    public void devolverGarfos(int i) {
+    public synchronized void devolverGarfos(int i) {
         estado[i] = PENSANDO;
 
         /* TODO 4: avise os filosofos que estao esperando que os garfos
@@ -52,6 +54,7 @@ public class Mesa {
          *
          *   notifyAll();
          */
+        notifyAll();
     }
 
     /* Infraestrutura auxiliar (usada pelo watchdog), NAO faz parte do exercicio. */
