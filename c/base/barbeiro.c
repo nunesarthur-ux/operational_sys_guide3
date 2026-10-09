@@ -46,6 +46,9 @@ int esperando = 0;   /* clientes sentados na sala de espera */
  *   sem_t barbeiros;   -> barbeiro pronto para cortar (o cliente espera nele)
  *   sem_t mutex;       -> exclusao mutua no acesso a 'esperando'
  */
+ sem_t clientes;
+ sem_t barbeiros;
+ sem_t mutex;
 
 
 /* ---- Infraestrutura auxiliar de log/verificacao. NAO faz parte do
@@ -145,14 +148,14 @@ void *barbeiro(void *arg) {
         /* TODO 1: dormir ate que chegue um cliente
          *   sem_wait(&clientes);
          */
-
+        sem_wait(&clientes);
         barbeiro_dormindo = 0;
         if (encerrar) break;   /* (infra) acordado pelo main no fim do expediente */
 
         /* TODO 2: entrar na regiao critica
          *   sem_wait(&mutex);
          */
-
+        sem_wait(&mutex);
         esperando--;           /* um cliente sai da sala de espera... */
         verificar_sala("barbeiro");
         chamados++;            /* (infra) */
@@ -160,10 +163,11 @@ void *barbeiro(void *arg) {
         /* TODO 3: ...e e chamado para a cadeira de corte
          *   sem_post(&barbeiros);
          */
-
+        sem_post(&barbeiros);
         /* TODO 4: sair da regiao critica
          *   sem_post(&mutex);
          */
+        sem_post(&mutex);
 
         cortar_cabelo();
     }
@@ -176,6 +180,7 @@ void *cliente(void *arg) {
     /* TODO 5: entrar na regiao critica
      *   sem_wait(&mutex);
      */
+    sem_wait(&mutex);
 
     if (esperando < CADEIRAS) {
         if (ATRASO_CLIENTE_US > 0) usleep(ATRASO_CLIENTE_US);
@@ -192,21 +197,23 @@ void *cliente(void *arg) {
          *         ele estiver dormindo)
          *   sem_post(&clientes);
          */
+        sem_post(&clientes);
 
         /* TODO 7: sair da regiao critica
          *   sem_post(&mutex);
          */
+        sem_post(&mutex);
 
         /* TODO 8: esperar o barbeiro ficar livre e chama-lo
          *   sem_wait(&barbeiros);
          */
-
+        sem_wait(&barbeiros);
         receber_corte(id);
     } else {
         /* TODO 9: sair da regiao critica (sim, tambem neste caminho!)
          *   sem_post(&mutex);
          */
-
+        sem_post(&mutex);
         desistir(id);
     }
     return NULL;
@@ -222,7 +229,9 @@ int main(void) {
      *   sem_init(&barbeiros, 0, 0);   // barbeiro ainda nao chamou ninguem
      *   sem_init(&mutex, 0, 1);       // binario, comeca "livre"
      */
-
+    sem_init(&clientes, 0, 0);
+    sem_init(&barbeiros, 0, 0);
+    sem_init(&mutex, 0, 1);
     long inicio = agora_us();
     pthread_create(&wd, NULL, watchdog, NULL);
     pthread_detach(wd);
@@ -241,7 +250,7 @@ int main(void) {
      *          Acorde-o para que ele perceba que o expediente acabou.
      *   sem_post(&clientes);
      */
-
+    sem_post(&clientes);
     pthread_join(barb, NULL);
 
     pthread_mutex_lock(&aux_mutex);
@@ -270,6 +279,8 @@ int main(void) {
      *   sem_destroy(&barbeiros);
      *   sem_destroy(&mutex);
      */
-
+    sem_destroy(&clientes);
+    sem_destroy(&barbeiros);
+    sem_destroy(&mutex);
     return 0;
 }
