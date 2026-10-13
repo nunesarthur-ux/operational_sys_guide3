@@ -46,7 +46,7 @@ public class Barbearia {
          *
          *   notifyAll();
          */
-        notifyAll();
+        notify();
         /* TODO 3: espere ate o barbeiro chamar a sua senha. Use um laco
          *         'while' (nao 'if'!):
          *
@@ -54,7 +54,7 @@ public class Barbearia {
          *       wait();
          *   }
          */
-        if (chamados <= minhaSenha) {
+        while (chamados <= minhaSenha) {
             wait();
         }
         verificador.chamado(id, minhaSenha, chamados);
@@ -90,7 +90,7 @@ public class Barbearia {
          *
          *   notifyAll();
          */
-        notifyAll();
+        notify();
         return true;
     }
 
@@ -103,7 +103,7 @@ public class Barbearia {
          *
          *   notifyAll();
          */ 
-        notifyAll();
+        notify();
     }
 
     /* Infraestrutura auxiliar (usada pelo watchdog e pelo resultado final). */
