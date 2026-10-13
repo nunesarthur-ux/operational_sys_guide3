@@ -26,7 +26,7 @@ public class Main {
         }
         for (Thread t : clientes) t.join();
 
-        Thread.sleep(200);
+        //Thread.sleep(200);
         barbearia.fechar();   // fim do expediente
         barbeiro.join();
 

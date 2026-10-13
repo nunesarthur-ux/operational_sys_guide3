@@ -103,7 +103,7 @@ public class Barbearia {
          *
          *   notifyAll();
          */ 
-        //notifyAll();
+        notifyAll();
     }
 
     /* Infraestrutura auxiliar (usada pelo watchdog e pelo resultado final). */
