@@ -46,7 +46,7 @@ public class Barbearia {
          *
          *   notifyAll();
          */
-        notify();
+        notifyAll();
         /* TODO 3: espere ate o barbeiro chamar a sua senha. Use um laco
          *         'while' (nao 'if'!):
          *
@@ -90,7 +90,7 @@ public class Barbearia {
          *
          *   notifyAll();
          */
-        notify();
+        notifyAll();
         return true;
     }
 
@@ -103,7 +103,7 @@ public class Barbearia {
          *
          *   notifyAll();
          */ 
-        notify();
+        //notifyAll();
     }
 
     /* Infraestrutura auxiliar (usada pelo watchdog e pelo resultado final). */
