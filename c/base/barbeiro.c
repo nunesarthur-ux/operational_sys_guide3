@@ -37,7 +37,7 @@
  * Ponto de injecao de atraso, usado nos experimentos da Parte 5.3
  * do roteiro. Deixe em 0 ate que o roteiro peca para alterar.
  * ------------------------------------------------------------- */
-#define ATRASO_CLIENTE_US     20000
+#define ATRASO_CLIENTE_US     0
 
 int esperando = 0;   /* clientes sentados na sala de espera */
 
@@ -202,12 +202,12 @@ void *cliente(void *arg) {
         /* TODO 7: sair da regiao critica
          *   sem_post(&mutex);
          */
-         sem_wait(&barbeiros);
-        sem_post(&mutex);
-
-        /* TODO 8: esperar o barbeiro ficar livre e chama-lo
+         sem_post(&mutex);
+         
+         /* TODO 8: esperar o barbeiro ficar livre e chama-lo
          *   sem_wait(&barbeiros);
          */
+         sem_wait(&barbeiros);
         receber_corte(id);
     } else {
         /* TODO 9: sair da regiao critica (sim, tambem neste caminho!)
@@ -230,7 +230,7 @@ int main(void) {
      *   sem_init(&mutex, 0, 1);       // binario, comeca "livre"
      */
     sem_init(&clientes, 0, 0);
-    sem_init(&barbeiros, 0, 0);
+    sem_init(&barbeiros, 0, 1);
     sem_init(&mutex, 0, 1);
     long inicio = agora_us();
     pthread_create(&wd, NULL, watchdog, NULL);
