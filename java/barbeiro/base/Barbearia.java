@@ -54,7 +54,7 @@ public class Barbearia {
          *       wait();
          *   }
          */
-        while (chamados <= minhaSenha) {
+        if (chamados <= minhaSenha) {
             wait();
         }
         verificador.chamado(id, minhaSenha, chamados);
