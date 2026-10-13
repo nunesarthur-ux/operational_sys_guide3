@@ -32,7 +32,7 @@ public class Barbearia {
      * Retorna true se o cliente foi atendido, false se desistiu.
      */
     /* TODO 1: adicione o modificador 'synchronized' a este metodo. */
-    public boolean entrar(int id) throws InterruptedException {
+    public synchronized boolean entrar(int id) throws InterruptedException {
         if (esperando == cadeiras) {
             return false;                    // sala de espera cheia: vai embora
         }
@@ -46,7 +46,7 @@ public class Barbearia {
          *
          *   notifyAll();
          */
-
+        notifyAll();
         /* TODO 3: espere ate o barbeiro chamar a sua senha. Use um laco
          *         'while' (nao 'if'!):
          *
@@ -54,7 +54,9 @@ public class Barbearia {
          *       wait();
          *   }
          */
-
+        while (chamados <= minhaSenha) {
+            wait();
+        }
         verificador.chamado(id, minhaSenha, chamados);
         return true;
     }
@@ -64,7 +66,7 @@ public class Barbearia {
      * Retorna false quando a barbearia fechou e nao ha mais ninguem.
      */
     /* TODO 4: adicione o modificador 'synchronized' a este metodo. */
-    public boolean chamarProximo() throws InterruptedException {
+    public synchronized boolean chamarProximo() throws InterruptedException {
 
         /* TODO 5: enquanto nao houver clientes (e a barbearia estiver
          *         aberta), o barbeiro dorme:
@@ -73,7 +75,9 @@ public class Barbearia {
          *       wait();
          *   }
          */
-
+        while (esperando == 0 && !fechada) {
+            wait();
+        }
         if (fechada && esperando == 0) {
             return false;                    // fim do expediente
         }
@@ -86,7 +90,7 @@ public class Barbearia {
          *
          *   notifyAll();
          */
-
+        notifyAll();
         return true;
     }
 
@@ -98,7 +102,8 @@ public class Barbearia {
          *         Acorde-o para que ele perceba que a barbearia fechou:
          *
          *   notifyAll();
-         */
+         */ 
+        notifyAll();
     }
 
     /* Infraestrutura auxiliar (usada pelo watchdog e pelo resultado final). */
