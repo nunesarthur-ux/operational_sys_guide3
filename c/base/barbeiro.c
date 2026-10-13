@@ -230,7 +230,7 @@ int main(void) {
      *   sem_init(&mutex, 0, 1);       // binario, comeca "livre"
      */
     sem_init(&clientes, 0, 0);
-    sem_init(&barbeiros, 0, 1);
+    sem_init(&barbeiros, 0, 0);
     sem_init(&mutex, 0, 1);
     long inicio = agora_us();
     pthread_create(&wd, NULL, watchdog, NULL);
@@ -250,7 +250,7 @@ int main(void) {
      *          Acorde-o para que ele perceba que o expediente acabou.
      *   sem_post(&clientes);
      */
-    sem_post(&clientes);
+    //sem_post(&clientes);
     pthread_join(barb, NULL);
 
     pthread_mutex_lock(&aux_mutex);
