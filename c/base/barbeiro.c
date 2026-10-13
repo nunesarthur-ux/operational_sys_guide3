@@ -155,7 +155,7 @@ void *barbeiro(void *arg) {
         /* TODO 2: entrar na regiao critica
          *   sem_wait(&mutex);
          */
-        //sem_wait(&mutex);
+        sem_wait(&mutex);
         esperando--;           /* um cliente sai da sala de espera... */
         verificar_sala("barbeiro");
         chamados++;            /* (infra) */
@@ -167,7 +167,7 @@ void *barbeiro(void *arg) {
         /* TODO 4: sair da regiao critica
          *   sem_post(&mutex);
          */
-        //sem_post(&mutex);
+        sem_post(&mutex);
 
         cortar_cabelo();
     }
@@ -180,7 +180,7 @@ void *cliente(void *arg) {
     /* TODO 5: entrar na regiao critica
      *   sem_wait(&mutex);
      */
-    //sem_wait(&mutex);
+    sem_wait(&mutex);
 
     if (esperando < CADEIRAS) {
         if (ATRASO_CLIENTE_US > 0) usleep(ATRASO_CLIENTE_US);
@@ -202,18 +202,18 @@ void *cliente(void *arg) {
         /* TODO 7: sair da regiao critica
          *   sem_post(&mutex);
          */
-        //sem_post(&mutex);
+         sem_wait(&barbeiros);
+        sem_post(&mutex);
 
         /* TODO 8: esperar o barbeiro ficar livre e chama-lo
          *   sem_wait(&barbeiros);
          */
-        sem_wait(&barbeiros);
         receber_corte(id);
     } else {
         /* TODO 9: sair da regiao critica (sim, tambem neste caminho!)
          *   sem_post(&mutex);
          */
-        //sem_post(&mutex);
+        sem_post(&mutex);
         desistir(id);
     }
     return NULL;
